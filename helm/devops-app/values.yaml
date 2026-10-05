@@ -1,0 +1,24 @@
+# Default settings. Override any of them with --set or -f my-values.yaml
+replicaCount: 3
+
+image:
+  repository: devops-app
+  tag: v1
+  pullPolicy: Never     # minikube: use the loaded image. Use IfNotPresent for a real registry.
+
+app:
+  color: navy
+  version: v1
+
+service:
+  type: NodePort
+  port: 80
+  nodePort: 30090
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 250m
+    memory: 128Mi

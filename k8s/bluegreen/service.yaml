@@ -1,0 +1,14 @@
+# The Service decides who gets traffic. Change "color" to flip between blue and green.
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  type: NodePort
+  selector:
+    app: web
+    color: blue                   # <- the switch
+  ports:
+    - port: 80
+      targetPort: 5000
+      nodePort: 30081

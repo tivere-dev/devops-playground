@@ -1,0 +1,18 @@
+groups:
+  - name: devops-app-alerts
+    rules:
+      - alert: AppInstanceDown
+        expr: up{job="devops-app"} == 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.instance }} is down"
+
+      - alert: HighErrorRate
+        expr: sum(rate(app_requests_total{status="500"}[2m])) > 0.1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "The app is returning errors (more than 0.1 per second)"

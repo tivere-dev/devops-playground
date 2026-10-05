@@ -1,0 +1,5 @@
+# Handlers run only when a task reports "changed" (here: when the page changes)
+- name: Reload nginx
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded

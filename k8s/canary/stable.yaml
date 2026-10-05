@@ -1,0 +1,23 @@
+# Canary on Kubernetes: 3 pod(s) of v1. The Service sends traffic to ALL pods with app=shop,
+# so traffic splits by pod count (3 stable + 1 canary = about 25% to the canary).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shop-stable
+spec:
+  replicas: 3
+  selector:
+    matchLabels: { app: shop, track: stable }
+  template:
+    metadata:
+      labels: { app: shop, track: stable }
+    spec:
+      containers:
+        - name: app
+          image: devops-app:v1
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          env:
+            - { name: COLOR, value: "blue" }
+            - { name: VERSION, value: "v1" }

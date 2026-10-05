@@ -1,0 +1,25 @@
+# Blue/Green on Kubernetes: the green copy of the app (version v2)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-green
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: web, color: green }
+  template:
+    metadata:
+      labels: { app: web, color: green }
+    spec:
+      containers:
+        - name: app
+          image: devops-app:v2
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          env:
+            - { name: COLOR, value: "green" }
+            - { name: VERSION, value: "v2" }
+          readinessProbe:
+            httpGet: { path: /health, port: 5000 }
+            periodSeconds: 5

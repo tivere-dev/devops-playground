@@ -1,0 +1,20 @@
+# Alertmanager: receives firing alerts from Prometheus, groups them, and sends notifications
+route:
+  receiver: lab-webhook
+  group_by: [alertname]
+  group_wait: 10s          # wait 10s to bundle similar alerts together
+  group_interval: 1m
+  repeat_interval: 1h      # remind every hour while it's still firing
+
+receivers:
+  - name: lab-webhook
+    webhook_configs:
+      - url: http://alert-receiver:8080/alerts   # a test receiver that just prints what it gets
+        send_resolved: true                       # also notify when the problem is fixed
+
+# Real-world example (needs a Slack incoming-webhook URL):
+#  - name: slack
+#    slack_configs:
+#      - api_url: https://hooks.slack.com/services/XXX/YYY/ZZZ
+#        channel: "#alerts"
+#        send_resolved: true

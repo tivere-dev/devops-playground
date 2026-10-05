@@ -1,0 +1,26 @@
+# Argo CD Application: "keep the cluster in sync with the helm/devops-app folder in my GitHub repo"
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devops-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/YOUR-USERNAME/devops-playground.git   # <- change this
+    targetRevision: main
+    path: helm/devops-app            # Argo CD understands Helm charts natively
+    helm:
+      releaseName: gitops-app
+      valuesObject:
+        service:
+          nodePort: 30091
+        app:
+          color: darkgreen
+  destination:
+    server: https://kubernetes.default.svc   # "this same cluster"
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true        # delete things that were removed from Git
+      selfHeal: true     # undo manual changes made with kubectl (Git is the source of truth)

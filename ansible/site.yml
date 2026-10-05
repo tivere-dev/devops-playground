@@ -1,0 +1,11 @@
+# site.yml - the playbook: "make every webserver look like THIS"
+- name: Configure web servers
+  hosts: webservers
+  become: true            # use sudo on the servers
+  vars:
+    site_title: "Configured by Ansible"
+    team_users:
+      - alice
+      - bob
+  roles:
+    - webserver

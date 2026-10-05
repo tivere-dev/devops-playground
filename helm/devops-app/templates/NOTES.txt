@@ -1,0 +1,2 @@
+{{ .Release.Name }} is installed: {{ .Values.replicaCount }} pods running {{ .Values.image.repository }}:{{ .Values.image.tag }}.
+Open it with:  minikube service {{ .Release.Name }} --url

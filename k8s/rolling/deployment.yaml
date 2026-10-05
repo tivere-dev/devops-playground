@@ -1,0 +1,42 @@
+# Rolling update: Kubernetes replaces pods a few at a time, so the site never goes down.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-app
+spec:
+  replicas: 3                     # always keep 3 copies running
+  selector:
+    matchLabels:
+      app: devops-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0           # never go below 3 working pods during an update
+      maxSurge: 1                 # add 1 new pod at a time
+  template:
+    metadata:
+      labels:
+        app: devops-app
+    spec:
+      containers:
+        - name: app
+          image: devops-app:v1
+          imagePullPolicy: Never  # use the image we loaded into minikube, don't download
+          ports:
+            - containerPort: 5000
+          env:
+            - name: COLOR
+              value: "purple"
+            - name: VERSION
+              value: "v1"
+          readinessProbe:         # only send traffic when /health answers
+            httpGet: { path: /health, port: 5000 }
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:          # restart the container if /health stops answering
+            httpGet: { path: /health, port: 5000 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "50m", memory: "64Mi" }
+            limits:   { cpu: "250m", memory: "128Mi" }

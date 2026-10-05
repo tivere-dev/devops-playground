@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 15s        # collect metrics every 15 seconds
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["alertmanager:9093"]
+
+rule_files:
+  - /etc/prometheus/alert-rules.yml
+
+scrape_configs:
+  - job_name: prometheus      # Prometheus watching itself
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: devops-app      # our app: both slots (one may be DOWN if not running - that's normal)
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["app-blue:5000", "app-green:5000"]
+
+  - job_name: node            # machine metrics (CPU, memory, disk) of Docker's Linux VM
+    static_configs:
+      - targets: ["node-exporter:9100"]

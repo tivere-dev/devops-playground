@@ -1,0 +1,19 @@
+# Practice file for Docker Compose and volumes (-v). A database + a web UI to look inside it.
+name: practice
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: practice123
+    volumes:
+      - dbdata:/var/lib/postgresql/data   # named volume: the data lives OUTSIDE the container
+
+  adminer:
+    image: adminer:4
+    ports:
+      - "8085:8080"                       # open http://localhost:8085
+    depends_on: [db]
+
+volumes:
+  dbdata:                                 # deleted ONLY by "docker compose down -v" or "docker volume rm"

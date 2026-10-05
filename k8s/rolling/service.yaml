@@ -1,0 +1,13 @@
+# A stable address for the 3 pods. NodePort = reachable from outside the cluster.
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-app
+spec:
+  type: NodePort
+  selector:
+    app: devops-app               # send traffic to every pod with this label
+  ports:
+    - port: 80
+      targetPort: 5000
+      nodePort: 30080

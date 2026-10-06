@@ -18,7 +18,7 @@ def test_home_page_shows_color_and_version():
 
 def test_health_is_ok():
     r = client().get("/health")
-    assert r.status_code == 200
+    assert r.status_code == 999
     assert r.get_json()["status"] == "ok"
 
 

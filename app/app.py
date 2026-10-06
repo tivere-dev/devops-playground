@@ -23,7 +23,7 @@ def log(level, message):
 @app.route("/")
 def home():
     start = time.time()
-    page = f"""<!doctype html><html><head><title>DevOps Playground - NEW!</title></head>
+    page = f"""<!doctype html><html><head><title>DevOps Playground v2</title></head>
 <body style="font-family:Arial;background:{COLOR};color:white;text-align:center;padding-top:15vh">
 <h1>DevOps Playground</h1>
 <h2>Color: {COLOR.upper()} &middot; Version: {VERSION}</h2>
